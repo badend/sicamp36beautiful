@@ -56,9 +56,8 @@ object Users{
 
   def apply(id:Int)={
     db.withSession { implicit session =>
-      val filteredUsers: Seq[Users#TableElementType] = users.filter(x=>x.id == id).run
-
-     }
+      users.filter(x=>x.id === id).run
+     }.map(x=>User.apply _)
 
 
   }
