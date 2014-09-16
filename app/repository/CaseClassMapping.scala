@@ -6,17 +6,13 @@ import scala.slick.driver.MySQLDriver
 import scala.slick.driver.MySQLDriver.simple._
 import scala.slick.jdbc.meta.MTable
 
-object CaseClassMapping extends App {
+object UserCaseClassMapping extends App {
 
   // the base query for the Users table
   val users = TableQuery[Users]
 
-  val db: MySQLDriver.backend.DatabaseDef = Database.forURL(
-    url=BeautifulConfig.db_default_url,
-    user=BeautifulConfig.db_default_user,
-    password=BeautifulConfig.db_default_password,
-    driver = BeautifulConfig.db_default_driver)
-  db.withSession { implicit session =>
+
+  DB.db.withSession { implicit session =>
 
     // create the schema
     users.ddl.create
@@ -44,20 +40,20 @@ class Users(tag: Tag) extends Table[User](tag, "USERS") {
 }
 
 object Users{
-  val users = TableQuery[Users]
+  val usersT = TableQuery[Users]
 
 
-  val db = Database.forURL(
-      url=BeautifulConfig.db_default_url,
-      user=BeautifulConfig.db_default_user,
-      password=BeautifulConfig.db_default_password,
-      driver = BeautifulConfig.db_default_driver)
 
+  def apply(id:Option[Int])= {
+    val users: Seq[User] =  DB.db.withSession { implicit session =>
+      if(id.isEmpty) usersT.run
+      else usersT.filter(x => x.id === id.get).run
+    }
 
-  def apply(id:Int)={
-    db.withSession { implicit session =>
-      users.filter(x=>x.id === id).run
-     }.map(x=>User.apply _)
+    println(users.size)
+    users.foreach(x=>println(x))
+    users
+
 
 
   }
