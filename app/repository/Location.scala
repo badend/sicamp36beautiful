@@ -7,11 +7,14 @@ package repository
 import java.sql.Timestamp
 import java.util.Date
 
-import utils.BeautifulConfig
+import actors.Actors
+import akka.actor.TypedProps
+import utils.{BadendTypedActorSupervisor, BeautifulConfig}
 
 import scala.slick.driver.MySQLDriver
 import scala.slick.driver.MySQLDriver.simple._
 import scala.slick.jdbc.meta.MTable
+import scala.slick.lifted.TableQuery
 
 object LocationCaseClassMapping extends App {
 
@@ -47,8 +50,7 @@ image2:Option[Int],
 image3:Option[Int],
 image4:Option[Int],
 latitude:Option[Double],
-longitude:Option[Double],
-g:Option[Double])
+longitude:Option[Double])
 
 class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   /*
@@ -87,7 +89,6 @@ point real not null default 0
   def image4 = column[Int]("image4", O.Nullable,O.DBType("VARCHAR(200)"))
   def latitude = column[Double]("latitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def longitude = column[Double]("longitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
-  def g = column[Double]("g", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
 
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
@@ -95,41 +96,85 @@ point real not null default 0
   def * = (id, category_name.?, area_name.?, name.?,
     createdt.?, addr.?, homepage.?, phone.?, description.?,
     image0.?, image1.?, image2.?, image3.?, image4.?,
-    latitude.?, longitude.?, g.?) <> (Location.tupled, Location.unapply)
+    latitude.?, longitude.?) <> (Location.tupled, Location.unapply)
 }
 
-object Locations{
-  val locationssT = TableQuery[Locations]
+class APICRUD extends APICRUDT with BadendTypedActorSupervisor{
+  val tapi = TableQuery[APIs]
 
 
-  val db = Database.forURL(
-    url=BeautifulConfig.db_default_url,
-    user=BeautifulConfig.db_default_user,
-    password=BeautifulConfig.db_default_password,
-    driver = BeautifulConfig.db_default_driver)
-
-
-  def apply(id:Option[Int])= {
-    val locationss: Seq[Location] =  DB.db.withSession { implicit session =>
-      if(id.isEmpty) locationssT.run
-      else locationssT.filter(x => x.id === id.get).run
+  def apply(name:Option[String]): Seq[API] = {
+    val apis: Seq[API] =  DB.db.withSession { implicit session =>
+      if(name.isEmpty) tapi.run
+      else tapi.filter(x => x.apicode === name.get).run
     }
 
-    println(locationss.size)
-    locationss.foreach(x=>println(x))
-    locationss
+    println(apis.size)
+    apis.foreach(x=>println(x))
+    apis
 
+  }
+  def apply(api:API): MySQLDriver.InsertInvoker[APIs#TableElementType]#SingleInsertResult ={
+    val r = DB.db.withSession { implicit session =>
+      tapi += api
+    }
+    println(r)
+    r
+  }
+  def apply(api:Seq[API]): MySQLDriver.InsertInvoker[APIs#TableElementType]#MultiInsertResult ={
+    val r = DB.db.withSession { implicit session =>
+      tapi ++= api
+    }
+    println(r)
+    r
+  }
+  def update(api:API): Int ={
+    DB.db.withSession { implicit session =>
+      tapi.filter(_.id === api.id).update(api)
+    }
+  }
 
+  def delete(api:API): Int ={
+    DB.db.withSession { implicit session =>
+      tapi.filter(_.apicode === api.apicode).delete
+    }
+  }
 
+  def delete(name:String): Int ={
+    DB.db.withSession { implicit session =>
+      tapi.filter(_.apicode === name).delete
+    }
+  }
+
+  def delete(id: Int): Int = {
+    DB.db.withSession { implicit session =>
+      tapi.filter(_.id === id).delete
+    }
   }
 
 
-
-
-
-  //def insertSupplier(): Int = suppliers += (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199")
-
-
-
-
 }
+
+
+object APIs{
+  val typed = Actors.typed
+  val api: APICRUDT= typed.typedActorOf(TypedProps[APICRUD]())
+}
+trait APICRUDT {
+
+  val tapi: TableQuery[APIs]
+
+  def apply(name: Option[String]): Seq[API]
+
+  def apply(api: API):MySQLDriver.InsertInvoker[APIs#TableElementType]#SingleInsertResult
+
+  def apply(api: Seq[API]):MySQLDriver.InsertInvoker[APIs#TableElementType]#MultiInsertResult
+
+  def update(api: API):Int
+
+  def delete(api: API):Int
+
+  def delete(id: Int): Int
+  def delete(name:String):Int
+}
+
