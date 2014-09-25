@@ -23,6 +23,10 @@ libraryDependencies ++= Seq(
   "com.alibaba" % "fastjson" % "1.1.41",
   "org.json4s" %% "json4s-jackson" % "3.2.10",
   "com.typesafe.slick" %% "slick" % "2.1.0",
+  "com.github.nscala-time" %% "nscala-time" % "1.4.0",
+  "org.joda" % "joda-convert" % "1.6",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "org.scalatest" %% "scalatest" % "2.1.6" % "test",
-  "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test"
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test",
+  "org.scalatestplus" % "play_2.10" % "1.0.0" % "test"
 )

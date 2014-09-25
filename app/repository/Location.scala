@@ -4,17 +4,19 @@ package repository
  * Created by badend on 9/16/14.
  */
 
-import java.sql.Timestamp
-import java.util.Date
+import com.github.nscala_time.time.Imports._
 
 import actors.Actors
 import akka.actor.TypedProps
+import org.joda.time.DateTime
 import utils.{BadendTypedActorSupervisor, BeautifulConfig}
 
 import scala.slick.driver.MySQLDriver
 import scala.slick.driver.MySQLDriver.simple._
 import scala.slick.jdbc.meta.MTable
 import scala.slick.lifted.TableQuery
+import com.github.tototoshi.slick._
+import com.github.tototoshi.slick.JdbcJodaSupport._
 
 object LocationCaseClassMapping extends App {
 
@@ -23,7 +25,7 @@ object LocationCaseClassMapping extends App {
 
 
   DB.db.withSession { implicit session =>
-
+    locationss.ddl.drop
     // create the schema
     locationss.ddl.create
 
@@ -35,146 +37,160 @@ object LocationCaseClassMapping extends App {
 
 }
 
-case class Location( id: Int,
+case class Location( id: Option[Int],
 category_name:Option[String],
 area_name:Option[String],
 name:Option[String],
-createdt:Option[java.sql.Timestamp],
+updatedt:Option[DateTime],
 addr:Option[String],
 homepage:Option[String],
 phone:Option[String],
 description:Option[String],
-image0:Option[Int],
-image1:Option[Int],
-image2:Option[Int],
-image3:Option[Int],
-image4:Option[Int],
+image0:Option[String],
+image1:Option[String],
+image2:Option[String],
+image3:Option[String],
+image4:Option[String],
 latitude:Option[Double],
 longitude:Option[Double])
 
 class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
-  /*
-id integer not null,
-category_id integer not null,
-area_id integer not null,
-name text not null,
-time text,
-address text,
-homepage text,
-phone text,
-description text,
-image_0 text,
-image_1 text,
-image_2 text,
-image_3 text,
-image_4 text,
-latitude real not null,
-longitude real not null,
-point real not null default 0
-   */
+
+
   // Auto Increment the id primary key column
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def category_name = column[String]("category_name", O.Nullable, O.DBType("VARCHAR(200)"))
   def area_name = column[String]("area_name", O.Nullable, O.DBType("VARCHAR(200)"))
   def name = column[String]("name", O.Nullable, O.DBType("VARCHAR(200)"))
-  def createdt = column[Timestamp]("createdt", O.Nullable, O.DBType("TIMESTAMP"))
+  def updatedt= column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"))
   def addr = column[String]("addr", O.Nullable, O.DBType("VARCHAR(1000)"))
   def homepage = column[String]("homepage", O.Nullable, O.DBType("VARCHAR(500)"))
   def phone = column[String]("phone", O.Nullable, O.DBType("VARCHAR(30)"))
   def description = column[String]("description", O.Nullable, O.DBType("TEXT"))
-  def image0 = column[Int]("image0", O.Nullable, O.DBType("VARCHAR(200)"))
-  def image1 = column[Int]("image1", O.Nullable,O.DBType("VARCHAR(200)"))
-  def image2 = column[Int]("image2", O.Nullable,O.DBType("VARCHAR(200)"))
-  def image3 = column[Int]("image3", O.Nullable,O.DBType("VARCHAR(200)"))
-  def image4 = column[Int]("image4", O.Nullable,O.DBType("VARCHAR(200)"))
+  def image0 = column[String]("image0", O.Nullable, O.DBType("VARCHAR(200)"))
+  def image1 = column[String]("image1", O.Nullable,O.DBType("VARCHAR(200)"))
+  def image2 = column[String]("image2", O.Nullable,O.DBType("VARCHAR(200)"))
+  def image3 = column[String]("image3", O.Nullable,O.DBType("VARCHAR(200)"))
+  def image4 = column[String]("image4", O.Nullable,O.DBType("VARCHAR(200)"))
   def latitude = column[Double]("latitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def longitude = column[Double]("longitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
+  def idx = index("idx_updatedt", (updatedt))
 
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a Location
-  def * = (id, category_name.?, area_name.?, name.?,
-    createdt.?, addr.?, homepage.?, phone.?, description.?,
+  def * = (id.?, category_name.?, area_name.?, name.?,
+    updatedt.?, addr.?, homepage.?, phone.?, description.?,
     image0.?, image1.?, image2.?, image3.?, image4.?,
     latitude.?, longitude.?) <> (Location.tupled, Location.unapply)
 }
 
-class APICRUD extends APICRUDT with BadendTypedActorSupervisor{
-  val tapi = TableQuery[APIs]
+class LocationCRUD extends LocationCRUDT with BadendTypedActorSupervisor{
+  val tlocation = TableQuery[Locations]
 
 
-  def apply(name:Option[String]): Seq[API] = {
-    val apis: Seq[API] =  DB.db.withSession { implicit session =>
-      if(name.isEmpty) tapi.run
-      else tapi.filter(x => x.apicode === name.get).run
+  def apply(name:Option[String]): Seq[Location] = {
+    val locations: Seq[Location] =  DB.db.withSession { implicit session =>
+      if(name.isEmpty) tlocation.run
+      else tlocation.filter(x => x.name === name.get).run
     }
 
-    println(apis.size)
-    apis.foreach(x=>println(x))
-    apis
+    locations
 
   }
-  def apply(api:API): MySQLDriver.InsertInvoker[APIs#TableElementType]#SingleInsertResult ={
+
+  def apply(id:Int): Seq[Location] = {
+    val locations: Seq[Location] =  DB.db.withSession { implicit session =>
+      if(id==0) tlocation.run
+      else tlocation.filter(x => x.id === id).run
+    }
+
+    println(locations.size)
+    locations.foreach(x=>println(x))
+    locations
+  }
+
+  def applyFrom(id:Int): Seq[Location] = {
+    val locations: Seq[Location] =  DB.db.withSession { implicit session =>
+     tlocation.filter(x => x.id >= id).run
+    }
+
+    println(locations.size)
+    locations.foreach(x=>println(x))
+    locations
+  }
+
+  def applyByTime(ts:DateTime=new DateTime(0)): Seq[Location] = {
+    val locations: Seq[Location] =  DB.db.withSession { implicit session =>
+      tlocation.filter(x => x.updatedt >= ts).sortBy(_.updatedt.asc).run
+    }
+
+    println(locations.size)
+    locations.foreach(x=>println(x))
+    locations
+  }
+
+  def apply(location:Location): MySQLDriver.InsertInvoker[Locations#TableElementType]#SingleInsertResult ={
     val r = DB.db.withSession { implicit session =>
-      tapi += api
+      tlocation += location
     }
     println(r)
     r
   }
-  def apply(api:Seq[API]): MySQLDriver.InsertInvoker[APIs#TableElementType]#MultiInsertResult ={
+  def apply(location:Seq[Location]): MySQLDriver.InsertInvoker[Locations#TableElementType]#MultiInsertResult ={
     val r = DB.db.withSession { implicit session =>
-      tapi ++= api
+      tlocation ++= location
     }
     println(r)
     r
   }
-  def update(api:API): Int ={
+  def update(location:Location): Int ={
     DB.db.withSession { implicit session =>
-      tapi.filter(_.id === api.id).update(api)
+      tlocation.filter(_.id === location.id).update(location)
     }
   }
 
-  def delete(api:API): Int ={
+  def delete(location:Location): Int ={
     DB.db.withSession { implicit session =>
-      tapi.filter(_.apicode === api.apicode).delete
+      tlocation.filter(_.id === location.id).delete
     }
   }
 
-  def delete(name:String): Int ={
+  def delete(id:Int): Int ={
     DB.db.withSession { implicit session =>
-      tapi.filter(_.apicode === name).delete
+      tlocation.filter(_.id=== id).delete
     }
   }
 
-  def delete(id: Int): Int = {
-    DB.db.withSession { implicit session =>
-      tapi.filter(_.id === id).delete
-    }
-  }
 
 
 }
 
 
-object APIs{
+object Locations{
   val typed = Actors.typed
-  val api: APICRUDT= typed.typedActorOf(TypedProps[APICRUD]())
+  val location: LocationCRUDT= typed.typedActorOf(TypedProps[LocationCRUD]())
 }
-trait APICRUDT {
+trait LocationCRUDT {
 
-  val tapi: TableQuery[APIs]
+  val tlocation: TableQuery[Locations]
 
-  def apply(name: Option[String]): Seq[API]
+  def apply(name: Option[String]): Seq[Location]
 
-  def apply(api: API):MySQLDriver.InsertInvoker[APIs#TableElementType]#SingleInsertResult
+  def apply(id:Int): Seq[Location]
 
-  def apply(api: Seq[API]):MySQLDriver.InsertInvoker[APIs#TableElementType]#MultiInsertResult
+  def apply(location: Location):MySQLDriver.InsertInvoker[Locations#TableElementType]#SingleInsertResult
 
-  def update(api: API):Int
+  def apply(location: Seq[Location]):MySQLDriver.InsertInvoker[Locations#TableElementType]#MultiInsertResult
 
-  def delete(api: API):Int
+  def applyFrom(id:Int): Seq[Location]
+  def applyByTime(ts:DateTime=new DateTime(0)): Seq[Location]
+
+  def update(location: Location):Int
+
+  def delete(location: Location):Int
 
   def delete(id: Int): Int
-  def delete(name:String):Int
+
 }
 
