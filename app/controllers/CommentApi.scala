@@ -17,93 +17,82 @@ import repository._
 
 
 
-object LocationApi extends Controller {
+object CommentApi extends Controller {
   val format = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
   implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all
 
   val fmt = ISODateTimeFormat.dateHourMinuteSecondMillis()
-  val locationForm = Form(
+  val commentForm = Form(
     mapping( "id"-> optional(number),
-"category_name"->optional(text),
-"area_name"->optional(text),
-"name"->optional(text),
-"updatedt"->optional(jodaDate(format)),
-"editor" -> optional(text),
-"addr"->optional(text),
-"homepage"->optional(text),
-"phone"->optional(text),
-"description"->optional(text),
-"image0"->optional(text),
-"image1"->optional(text),
-"image2"->optional(text),
-"image3"->optional(text),
-"image4"->optional(text),
-"latitude"->optional(of[Double]),
-"longitude"->optional(of[Double]), "restroom"->optional(text))
-      (Location.apply)(Location.unapply))
-
-
-  def readByName(name: String) = Action { implicit req =>
-
-    Ok(w(Locations.location.apply(Option(name))))
-  }
+      "user_id" -> text,
+      "editor" -> text,
+      "content" -> optional(text),
+      "updatedt" -> jodaDate(format),
+      "location_id" -> number,
+      "score" -> optional(number))
+      (Comment.apply)(Comment.unapply))
 
   def readAll = Action { implicit req =>
 
-    Ok(w(Locations.location.apply(None)))
+    Ok(w(Comments.comment.applyByTime()))
   }
 
   def read(id: Int) = Action { implicit req =>
 
-    Ok(w(Locations.location.apply(id)))
+    Ok(w(Comments.comment.apply(id)))
   }
 
   def readFromId(id: Int) = Action { implicit req =>
 
-    Ok(w(Locations.location.applyFrom(id)))
+    Ok(w(Comments.comment.applyFrom(id)))
   }
 
+  def readByLocationId(id:Int) =Action { implicit req =>
+
+    Ok(w(Comments.comment.applyByLocationId(id)))
+  }
   def readByTime(time: Long) = Action { implicit req =>
 
-    Ok(w(Locations.location.applyByTime(new DateTime(time))))
+    Ok(w(Comments.comment.applyByTime(new DateTime(time))))
   }
 
   def readByTimeStr(tstr:String) = Action { implicit req =>
 
-    Ok(w(Locations.location.applyByTime(fmt.parseDateTime(tstr))))
+    Ok(w(Comments.comment.applyByTime(fmt.parseDateTime(tstr))))
   }
 
   def create() = Action { implicit req =>
-    val bind = locationForm.bindFromRequest
+    val bind = commentForm.bindFromRequest
 
     bind.errors.foreach(x=>println(x))
-    val location = bind.get
-    Locations.location.apply(location)
+    val comment = bind.get
+    Comments.comment.apply(comment)
     Ok("ok")
   }
 
   def createJson() = Action { implicit req =>
-    val location = r[Location](req.body.asText.get)
-    Locations.location.apply(location)
+    val comment = r[Comment](req.body.asText.get)
+    Comments.comment.apply(comment)
     Ok("ok")
   }
 
   def update = Action { implicit req =>
-    val location = locationForm.bindFromRequest.get
-    Locations.location.update(location)
+    val comment = commentForm.bindFromRequest.get
+    println(s"controller = $comment")
+    Comments.comment.update(comment)
     Ok("ok")
   }
 
   def updateJson = Action { implicit req =>
-    val location = r[Location](req.body.asText.get)
-    Locations.location.update(location)
+    val comment = r[Comment](req.body.asText.get)
+    Comments.comment.update(comment)
     Ok("ok")
   }
 
 
   def delete(id: Int) = Action { req =>
-    Locations.location.delete(id)
+    Comments.comment.delete(id)
     Ok("ok")
   }
 
@@ -115,17 +104,17 @@ object LocationApi extends Controller {
     oper match {
       case "del" => {
         val id = data.remove("id").get.mkString
-        Locations.location.delete(id.toInt)
+        Comments.comment.delete(id.toInt)
 
       }
       case "add" => {
         val id = data.remove("id").get.mkString
-        Locations.location(locationForm.bind(data.map(x => (x._1, x._2.mkString)).toMap).get)
+        Comments.comment(commentForm.bind(data.map(x => (x._1, x._2.mkString)).toMap).get)
       }
       case "edit" => {
-        val location = locationForm.bind(data.map(x => (x._1, x._2.mkString)).toMap).get
-        println(location)
-        Locations.location.update(location)
+        val comment = commentForm.bind(data.map(x => (x._1, x._2.mkString)).toMap).get
+        println(Comment)
+        Comments.comment.update(comment)
       }
       case _ => {
 

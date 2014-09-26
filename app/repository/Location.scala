@@ -24,6 +24,7 @@ object LocationCaseClassMapping extends App {
   val locationss = TableQuery[Locations]
 
 
+
   DB.db.withSession { implicit session =>
     locationss.ddl.drop
     // create the schema
@@ -42,6 +43,7 @@ category_name:Option[String],
 area_name:Option[String],
 name:Option[String],
 updatedt:Option[DateTime],
+editor:Option[String],
 addr:Option[String],
 homepage:Option[String],
 phone:Option[String],
@@ -52,7 +54,7 @@ image2:Option[String],
 image3:Option[String],
 image4:Option[String],
 latitude:Option[Double],
-longitude:Option[Double])
+longitude:Option[Double],restroom:Option[String])
 
 class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
 
@@ -63,6 +65,7 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def area_name = column[String]("area_name", O.Nullable, O.DBType("VARCHAR(200)"))
   def name = column[String]("name", O.Nullable, O.DBType("VARCHAR(200)"))
   def updatedt= column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"))
+  def editor = column[String]("editor", O.Nullable, O.DBType("VARCHAR(200)"))
   def addr = column[String]("addr", O.Nullable, O.DBType("VARCHAR(1000)"))
   def homepage = column[String]("homepage", O.Nullable, O.DBType("VARCHAR(500)"))
   def phone = column[String]("phone", O.Nullable, O.DBType("VARCHAR(30)"))
@@ -74,15 +77,15 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def image4 = column[String]("image4", O.Nullable,O.DBType("VARCHAR(200)"))
   def latitude = column[Double]("latitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def longitude = column[Double]("longitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
+  def restroom = column[String]("restroom", O.Nullable,O.DBType("VARCHAR(2)"))
   def idx = index("idx_updatedt", (updatedt))
-
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a Location
   def * = (id.?, category_name.?, area_name.?, name.?,
-    updatedt.?, addr.?, homepage.?, phone.?, description.?,
+    updatedt.?, editor.?, addr.?, homepage.?, phone.?, description.?,
     image0.?, image1.?, image2.?, image3.?, image4.?,
-    latitude.?, longitude.?) <> (Location.tupled, Location.unapply)
+    latitude.?, longitude.?, restroom.?) <> (Location.tupled, Location.unapply)
 }
 
 class LocationCRUD extends LocationCRUDT with BadendTypedActorSupervisor{

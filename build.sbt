@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.32",
   "com.alibaba" % "fastjson" % "1.1.41",
   "org.json4s" %% "json4s-jackson" % "3.2.10",
+  "org.json4s" %% "json4s-native" % "3.2.10",
+  "org.json4s" %% "json4s-ext" % "3.2.10",
   "com.typesafe.slick" %% "slick" % "2.1.0",
   "com.github.nscala-time" %% "nscala-time" % "1.4.0",
   "org.joda" % "joda-convert" % "1.6",

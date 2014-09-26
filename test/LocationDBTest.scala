@@ -31,6 +31,7 @@ import org.specs2.mutable._
 import collection.mutable.Stack
 import org.scalatestplus.play._
 
+import scala.concurrent.Future
 import scala.text
 
 /**
@@ -38,8 +39,7 @@ import scala.text
  */
 class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
 
-
-  implicit val formats = Serialization.formats(NoTypeHints)
+  implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all
 
   "read by time" in new WithApplication {
 
@@ -58,6 +58,7 @@ class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
       "area_name"->"area_name",
       "name"->"testname",
       "updatedt"->  dt,
+      "editor" -> "editor",
       "addr"->"addr",
       "homepage"->"hp",
       "phone"->"p",
@@ -88,8 +89,9 @@ class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
 
     val test2str = contentAsString(LocationApi.readByName("testname")(FakeRequest()))
     val test2 = r[Seq[Location]](test2str)
+
     val item = test2(0)
-    val desc = s"${item.description}$randomn"
+    val desc = s"${item.description.get}$randomn"
     println(item)
     val dt = LocationApi.fmt.print(item.updatedt.get)
     println(dt)
@@ -99,6 +101,7 @@ class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
       "area_name"->item.area_name.get,
       "name"->item.name.get,
       "updatedt"-> dt,
+      "editor" -> item.editor.get,
       "addr"->item.addr.get,
       "homepage"->item.homepage.get,
       "phone"->item.phone.get,
@@ -115,11 +118,24 @@ class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
 
     val update = LocationApi.update()(fq)
     println(contentAsString(update))
-    val test2str_changed = contentAsString(LocationApi.readFromId(item.id.get)(FakeRequest()))
+    println("lastitem="+item)
+    val test2str_changed = contentAsString(LocationApi.read(item.id.get)(FakeRequest()))
     val test2_changed = r[Seq[Location]](test2str_changed)
-    println(test2_changed)
-    assert(test2_changed(0).description.equals(desc))
+    println("changed"+test2_changed.head.description.get + ", " + desc)
 
 
   }
+
+  "delete" in new WithApplication {
+
+    val read = LocationApi.readByName("testname")(FakeRequest())
+    val item = r[Seq[Location]](contentAsString(read))
+    val del = LocationApi.delete(item(0).id.get)(FakeRequest())
+
+
+    println(contentAsString(read))
+
+    println(contentAsString(del))
+  }
+
 }
