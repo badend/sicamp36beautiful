@@ -69,6 +69,7 @@ object LocationApi extends Controller {
     Ok(w(Locations.location.applyByTime(new DateTime(time))))
   }
 
+
   def readByTimeStr(tstr:String) = Action { implicit req =>
 
     Ok(w(Locations.location.applyByTime(fmt.parseDateTime(tstr))))

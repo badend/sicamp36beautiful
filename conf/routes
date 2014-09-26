@@ -18,3 +18,11 @@ POST    /location                   controllers.LocationApi.create
 PUT     /location                   controllers.LocationApi.update
 DELETE  /location/:id               controllers.LocationApi.delete(id:Int)
 
+GET     /comment                   controllers.CommentApi.readAll
+GET     /commentByLocationId/:id   controllers.CommentApi.readByLocationId(id:Int)
+GET     /comment/:id               controllers.CommentApi.read(id:Int)
+GET     /commentByTime/:timestamp  controllers.CommentApi.readByTime(timestamp:Long)
+GET     /commentByTimeStr/:str     controllers.CommentApi.readByTimeStr(str:String)
+POST    /comment                   controllers.CommentApi.create
+PUT     /comment                   controllers.CommentApi.update
+DELETE  /comment/:id               controllers.CommentApi.delete(id:Int)
