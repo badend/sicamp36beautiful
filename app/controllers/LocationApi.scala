@@ -99,8 +99,8 @@ object LocationApi extends Controller {
       m.getOrElse("image4", Seq.empty[String]).headOption,
       Option(m.getOrElse("latitude", Seq.empty[String]).headOption.getOrElse("0").toDouble),
       Option(m.getOrElse("longitude", Seq.empty[String]).headOption.getOrElse("0").toDouble),
-      m.getOrElse("restroom", Seq.empty[String]).headOption,
-      m.getOrElse("deleted", Seq.empty[String]).headOption,
+      m.getOrElse("restroom", Seq("0")).headOption,
+      m.getOrElse("deleted", Seq("0")).headOption,
       m.getOrElse("opentime", Seq.empty[String]).headOption)
 
   }

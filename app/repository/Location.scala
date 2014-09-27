@@ -141,8 +141,8 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def image4 = column[String]("image4", O.Nullable,O.DBType("VARCHAR(200)"))
   def latitude = column[Double]("latitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def longitude = column[Double]("longitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
-  def restroom = column[String]("restroom", O.Nullable,O.DBType("VARCHAR(2)"))
-  def deleted = column[String]("deleted", O.Nullable,O.DBType("VARCHAR(2)"))
+  def restroom = column[String]("restroom", O.DBType("VARCHAR(2)"))
+  def deleted = column[String]("deleted", O.DBType("VARCHAR(2)"))
   def opentime = column[String]("opentime", O.Nullable,O.DBType("VARCHAR(20)"))
   def idx = index("idx_updatedt", (updatedt))
 
