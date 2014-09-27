@@ -26,7 +26,7 @@ object CommentApi extends Controller {
   val commentForm = Form(
     mapping( "id"-> optional(number),
       "user_id" -> text,
-      "editor" -> text,
+      "editor" -> optional(text),
       "content" -> optional(text),
       "updatedt" -> optional(jodaDate(format)),
       "location_id" -> number,

@@ -40,7 +40,7 @@ object CommentCaseClassMapping extends App {
 
 case class Comment( id: Option[Int],
 user_id:String,
-editor:String,
+editor:Option[String],
 content:Option[String],
 updatedt:Option[DateTime],
 location_id:Int,
@@ -61,7 +61,7 @@ class Comments(tag: Tag) extends Table[Comment](tag, "COMMENTS")  {
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a Comment
-  def * = (id.?, user_id, editor, content.?, updatedt.?, location_id, score.?) <> (Comment.tupled, Comment.unapply)
+  def * = (id.?, user_id, editor.?, content.?, updatedt.?, location_id, score.?) <> (Comment.tupled, Comment.unapply)
 }
 
 class CommentCRUD extends CommentCRUDT with BadendTypedActorSupervisor{
