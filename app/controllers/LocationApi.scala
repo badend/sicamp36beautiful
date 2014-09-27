@@ -84,7 +84,7 @@ object LocationApi extends Controller {
     Location(
       Option(m.getOrElse("id", Seq.empty[String]).headOption.getOrElse("0").toInt),
       m.getOrElse("category_name", Seq.empty[String]).headOption,
-      m.getOrElse("area_name", Seq.empty[String]).headOption,
+      m.getOrElse("area_name", Seq(m.getOrElse("addr", Seq("없음")).head.substring(0,2))).headOption,
       m.getOrElse("name", Seq.empty[String]).headOption,
       jdt,
       m.getOrElse("editor", Seq.empty[String]).headOption,
