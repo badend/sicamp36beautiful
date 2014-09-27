@@ -42,7 +42,7 @@ case class Ask( id: Option[Int],
                     editor:Option[String],
                     email:Option[String],
                     content:Option[String],
-                    updatedt:DateTime,
+                    updatedt:Option[DateTime],
                     location_id:Option[Int])
 
 class Asks(tag: Tag) extends Table[Ask](tag, "ASKS")  {
@@ -59,7 +59,7 @@ class Asks(tag: Tag) extends Table[Ask](tag, "ASKS")  {
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
   // column values to / from a Ask
-  def * = (id.?, editor.?, email.?, content.?, updatedt, location_id.?) <> (Ask.tupled, Ask.unapply)
+  def * = (id.?, editor.?, email.?, content.?, updatedt.?, location_id.?) <> (Ask.tupled, Ask.unapply)
 }
 
 class AskCRUD extends AskCRUDT with BadendTypedActorSupervisor{

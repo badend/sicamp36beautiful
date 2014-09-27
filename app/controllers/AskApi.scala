@@ -28,7 +28,7 @@ object AskApi extends Controller {
       "editor" -> optional(text),
       "email" -> optional(text),
       "content" -> optional(text),
-      "updatedt" -> jodaDate(format),
+      "updatedt" -> optional(jodaDate(format)),
       "location_id" -> optional(number))
        (Ask.apply)(Ask.unapply))
 
