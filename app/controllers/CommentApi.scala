@@ -28,7 +28,7 @@ object CommentApi extends Controller {
       "user_id" -> text,
       "editor" -> text,
       "content" -> optional(text),
-      "updatedt" -> jodaDate(format),
+      "updatedt" -> optional(jodaDate(format)),
       "location_id" -> number,
       "score" -> optional(number))
       (Comment.apply)(Comment.unapply))
