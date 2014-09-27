@@ -54,8 +54,72 @@ image2:Option[String],
 image3:Option[String],
 image4:Option[String],
 latitude:Option[Double],
-longitude:Option[Double],restroom:Option[String])
+longitude:Option[Double],
+restroom:Option[String],
+deleted:Option[String],
+opentime:Option[String])
+/*case class Image(
+                  )
 
+object Location2 {
+  def apply (id: Option[Int],
+                       category_name:Option[String],
+                       area_name:Option[String],
+                       name:Option[String],
+                       updatedt:Option[DateTime],
+                       editor:Option[String],
+                       addr:Option[String],
+                       homepage:Option[String],
+                       phone:Option[String],
+                       description:Option[String],
+                       image0:Option[String],
+                       image1:Option[String],
+                       image2:Option[String],
+                       image3:Option[String],
+                       image4:Option[String],
+                       latitude:Option[Double],
+                       longitude:Option[Double],
+                       restroom:Option[String],
+                       deleted:Option[String],
+                       opentime:Option[String]) = {
+    Location(id,
+      category_name,
+      area_name,
+      name,
+      updatedt,
+      editor,
+      addr,
+      homepage,
+      phone,
+      description,
+      Image(image0,image1,image2,image3,image4),
+      latitude,
+      longitude,
+      restroom,
+      deleted,
+      opentime)
+  }
+
+  def unapply(l:Location) = {
+    (l.id,
+      l.category_name,
+      l.area_name,
+      l.name,
+      l.updatedt,
+      l.editor,
+      l.addr,
+      l.homepage,
+      l.phone,
+      l.description,
+      l.image.image0,l.image.image1,l.image.image2,l.image.image3,l.image.image4,
+      l.latitude,
+      l.longitude,
+      l.restroom,
+      l.deleted,
+      l.opentime)
+  }
+}
+*/
 class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
 
 
@@ -64,7 +128,7 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def category_name = column[String]("category_name", O.Nullable, O.DBType("VARCHAR(200)"))
   def area_name = column[String]("area_name", O.Nullable, O.DBType("VARCHAR(200)"))
   def name = column[String]("name", O.Nullable, O.DBType("VARCHAR(200)"))
-  def updatedt= column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"))
+  def updatedt= column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"), O.Default(DateTime.now))
   def editor = column[String]("editor", O.Nullable, O.DBType("VARCHAR(200)"))
   def addr = column[String]("addr", O.Nullable, O.DBType("VARCHAR(1000)"))
   def homepage = column[String]("homepage", O.Nullable, O.DBType("VARCHAR(500)"))
@@ -78,6 +142,8 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def latitude = column[Double]("latitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def longitude = column[Double]("longitude", O.Nullable, O.DBType("FLOAT( 10, 6 )"))
   def restroom = column[String]("restroom", O.Nullable,O.DBType("VARCHAR(2)"))
+  def deleted = column[String]("deleted", O.Nullable,O.DBType("VARCHAR(2)"))
+  def opentime = column[String]("opentime", O.Nullable,O.DBType("VARCHAR(20)"))
   def idx = index("idx_updatedt", (updatedt))
 
   // the * projection (e.g. select * ...) auto-transforms the tupled
@@ -85,8 +151,10 @@ class Locations(tag: Tag) extends Table[Location](tag, "LOCATIONS")  {
   def * = (id.?, category_name.?, area_name.?, name.?,
     updatedt.?, editor.?, addr.?, homepage.?, phone.?, description.?,
     image0.?, image1.?, image2.?, image3.?, image4.?,
-    latitude.?, longitude.?, restroom.?) <> (Location.tupled, Location.unapply)
+    latitude.?, longitude.?, restroom.?, deleted.?, opentime.?) <> (Location.tupled, Location.unapply)
+
 }
+
 
 class LocationCRUD extends LocationCRUDT with BadendTypedActorSupervisor{
   val tlocation = TableQuery[Locations]

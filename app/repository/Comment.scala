@@ -54,7 +54,7 @@ class Comments(tag: Tag) extends Table[Comment](tag, "COMMENTS")  {
   def user_id = column[String]("user_id", O.Nullable, O.DBType("VARCHAR(1000)"))
   def editor = column[String]("editor", O.Nullable, O.DBType("VARCHAR(200)"))
   def content = column[String]("content", O.Nullable, O.DBType("TEXT"))
-  def updatedt = column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"))
+  def updatedt = column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"), O.Default(DateTime.now))
   def location_id = column[Int]("location_id", O.DBType("INT"))
   def score = column[Int]("score", O.Nullable, O.DBType("INT"))
   def idx = index("idx_updatedt", (updatedt))

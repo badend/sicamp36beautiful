@@ -26,3 +26,12 @@ GET     /commentByTimeStr/:str     controllers.CommentApi.readByTimeStr(str:Stri
 POST    /comment                   controllers.CommentApi.create
 PUT     /comment                   controllers.CommentApi.update
 DELETE  /comment/:id               controllers.CommentApi.delete(id:Int)
+
+GET     /ask                   controllers.AskApi.readAll
+GET     /askByLocationId/:id   controllers.AskApi.readByLocationId(id:Int)
+GET     /ask/:id               controllers.AskApi.read(id:Int)
+GET     /askByTime/:timestamp  controllers.AskApi.readByTime(timestamp:Long)
+GET     /askByTimeStr/:str     controllers.AskApi.readByTimeStr(str:String)
+POST    /ask                   controllers.AskApi.create
+PUT     /ask                   controllers.AskApi.update
+DELETE  /ask/:id               controllers.AskApi.delete(id:Int)

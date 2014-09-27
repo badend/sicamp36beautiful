@@ -5,4 +5,6 @@ package utils
  */
 object ReturnCode {
 
+  val SUCCESS= """{"result" : "ok"}"""
+
 }

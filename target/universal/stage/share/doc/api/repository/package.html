@@ -110,6 +110,58 @@
       </span>
       </h4>
       
+    </li><li name="repository.Ask" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AskextendsProductwithSerializable"></a>
+      <a id="Ask:Ask"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Ask.html"><span class="name">Ask</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="editor">editor: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="email">email: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="content">content: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="updatedt">updatedt: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="location_id">location_id: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="repository.AskCRUD" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AskCRUDextendsAskCRUDTwithBadendTypedActorSupervisor"></a>
+      <a id="AskCRUD:AskCRUD"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AskCRUD.html"><span class="name">AskCRUD</span></a><span class="result"> extends <a href="AskCRUDT.html" class="extype" name="repository.AskCRUDT">AskCRUDT</a> with <a href="../utils/BadendTypedActorSupervisor.html" class="extype" name="utils.BadendTypedActorSupervisor">BadendTypedActorSupervisor</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="repository.AskCRUDT" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AskCRUDTextendsAnyRef"></a>
+      <a id="AskCRUDT:AskCRUDT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AskCRUDT.html"><span class="name">AskCRUDT</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="repository.Asks" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Asksextendsslick.driver.MySQLDriver.simple.Table[repository.Ask]"></a>
+      <a id="Asks:Asks"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Asks.html"><span class="name">Asks</span></a><span class="result"> extends <span class="extype" name="scala.slick.profile.RelationalProfile.SimpleQL.Table">scala.slick.driver.JdbcProfile.SimpleQL.Table</span>[<a href="Ask.html" class="extype" name="repository.Ask">Ask</a>]</span>
+      </span>
+      </h4>
+      
     </li><li name="repository.Coffees" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Coffeesextendsslick.driver.MySQLDriver.simple.Table[(String,Int,Double,Int,Int)]"></a>
       <a id="Coffees:Coffees"></a>
@@ -184,7 +236,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Location.html"><span class="name">Location</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="category_name">category_name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="area_name">area_name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="name">name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="updatedt">updatedt: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>, <span name="editor">editor: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="addr">addr: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="homepage">homepage: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="phone">phone: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="description">description: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image0">image0: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image1">image1: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image2">image2: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image3">image3: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image4">image4: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="latitude">latitude: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="longitude">longitude: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="restroom">restroom: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Location.html"><span class="name">Location</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="category_name">category_name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="area_name">area_name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="name">name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="updatedt">updatedt: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>, <span name="editor">editor: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="addr">addr: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="homepage">homepage: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="phone">phone: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="description">description: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image0">image0: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image1">image1: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image2">image2: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image3">image3: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="image4">image4: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="latitude">latitude: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="longitude">longitude: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="restroom">restroom: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="deleted">deleted: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="opentime">opentime: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -348,6 +400,32 @@
       </span>
       <span class="symbol">
         <a href="APIs$.html"><span class="name">APIs</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="repository.AskCaseClassMapping" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AskCaseClassMapping"></a>
+      <a id="AskCaseClassMapping:AskCaseClassMapping"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AskCaseClassMapping$.html"><span class="name">AskCaseClassMapping</span></a><span class="result"> extends <span class="extype" name="scala.App">App</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="repository.Asks" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Asks"></a>
+      <a id="Asks:Asks"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Asks$.html"><span class="name">Asks</span></a>
       </span>
       </h4>
       

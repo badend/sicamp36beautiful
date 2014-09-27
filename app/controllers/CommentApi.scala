@@ -68,32 +68,32 @@ object CommentApi extends Controller {
     bind.errors.foreach(x=>println(x))
     val comment = bind.get
     Comments.comment.apply(comment)
-    Ok("ok")
+    Ok(utils.ReturnCode.SUCCESS)
   }
 
   def createJson() = Action { implicit req =>
     val comment = r[Comment](req.body.asText.get)
     Comments.comment.apply(comment)
-    Ok("ok")
+    Ok(utils.ReturnCode.SUCCESS)
   }
 
   def update = Action { implicit req =>
     val comment = commentForm.bindFromRequest.get
     println(s"controller = $comment")
     Comments.comment.update(comment)
-    Ok("ok")
+    Ok(utils.ReturnCode.SUCCESS)
   }
 
   def updateJson = Action { implicit req =>
     val comment = r[Comment](req.body.asText.get)
     Comments.comment.update(comment)
-    Ok("ok")
+    Ok(utils.ReturnCode.SUCCESS)
   }
 
 
   def delete(id: Int) = Action { req =>
     Comments.comment.delete(id)
-    Ok("ok")
+    Ok(utils.ReturnCode.SUCCESS)
   }
 
   def edit = Action { implicit req =>
