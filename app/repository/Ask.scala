@@ -26,7 +26,7 @@ object AskCaseClassMapping extends App {
 
 
   DB.db.withSession { implicit session  =>
-    //Askss.ddl.drop
+    Askss.ddl.drop
     // create the schema
     Askss.ddl.create
 
@@ -53,7 +53,7 @@ class Asks(tag: Tag) extends Table[Ask](tag, "ASKS")  {
   def editor = column[String]("editor", O.Nullable, O.DBType("VARCHAR(200)"))
   def email = column[String]("email", O.Nullable, O.DBType("VARCHAR(200)"))
   def content = column[String]("content", O.Nullable, O.DBType("TEXT"))
-  def updatedt = column[DateTime]("updatedt", O.Nullable, O.DBType("TIMESTAMP"), O.Default(DateTime.now))
+  def updatedt = column[DateTime]("updatedt", O.DBType("TIMESTAMP"))
   def location_id = column[Int]("location_id", O.DBType("INT"))
   def idx = index("idx_updatedt", (updatedt))
 
