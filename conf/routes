@@ -26,6 +26,8 @@ GET     /commentByTimeStr/:str     controllers.CommentApi.readByTimeStr(str:Stri
 POST    /comment                   controllers.CommentApi.create
 PUT     /comment                   controllers.CommentApi.update
 DELETE  /comment/:id               controllers.CommentApi.delete(id:Int)
+GET     /scoreAll                   controllers.CommentApi.readScoreAvgAll
+
 
 GET     /ask                   controllers.AskApi.readAll
 GET     /askByLocationId/:id   controllers.AskApi.readByLocationId(id:Int)

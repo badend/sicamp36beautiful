@@ -115,6 +115,16 @@ class CommentCRUD extends CommentCRUDT with BadendTypedActorSupervisor{
     println(r)
     r
   }
+
+
+  def applyByIds(ids:Seq[Int]): Seq[Comment] ={
+    val r = DB.db.withSession { implicit session =>
+
+      tComment.filter(x=> x.location_id.inSet(ids.toSet)).run
+      }
+    r
+
+  }
   def apply(comment:Seq[Comment]): MySQLDriver.InsertInvoker[Comments#TableElementType]#MultiInsertResult ={
     val r = DB.db.withSession { implicit session =>
       tComment ++= comment
@@ -161,6 +171,7 @@ trait CommentCRUDT {
 
   def apply(Comment: Seq[Comment]):MySQLDriver.InsertInvoker[Comments#TableElementType]#MultiInsertResult
 
+  def applyByIds(ids:Seq[Int]): Seq[Comment]
   def applyFrom(id:Int): Seq[Comment]
   def applyByTime(ts:DateTime=new DateTime(0)): Seq[Comment]
 

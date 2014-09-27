@@ -52,6 +52,16 @@ object CommentApi extends Controller {
 
     Ok(w(Comments.comment.applyByLocationId(id)))
   }
+
+  def readScoreAvgAll =Action { implicit req =>
+
+    val avg = Comments.comment.applyFrom(0)
+      .filter(x=>x.score.getOrElse(0)>0)
+      .groupBy(x=>x.location_id)
+     .map(x=> (x._1.toString , x._2.map(x=>x.score.getOrElse(0)).sum.toDouble/x._2.size)).toMap
+
+    Ok(w(avg))
+  }
   def readByTime(time: Long) = Action { implicit req =>
 
     Ok(w(Comments.comment.applyByTime(new DateTime(time))))

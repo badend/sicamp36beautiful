@@ -44,7 +44,9 @@ class LocationDBTest extends PlaySpec with MockitoSugar  with Results{
   "read by time" in new WithApplication {
 
     val read = LocationApi.readByTime(0).apply(FakeRequest())
-    println(contentAsString(read))
+    val str = contentAsString(read)
+    val o = r[Seq[Location]](str)
+    println(o)
 
   }
 
