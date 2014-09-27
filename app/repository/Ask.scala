@@ -45,7 +45,7 @@ case class Ask( id: Option[Int],
                     updatedt:DateTime,
                     location_id:Option[Int])
 
-class Asks(tag: Tag) extends Table[Ask](tag, "COMMENTS")  {
+class Asks(tag: Tag) extends Table[Ask](tag, "ASKS")  {
 
 
   // Auto Increment the id primary key column

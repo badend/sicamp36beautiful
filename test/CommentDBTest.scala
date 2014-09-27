@@ -82,7 +82,7 @@ class CommentDBTest extends PlaySpec with MockitoSugar  with Results{
     val item = test2(0)
     val content = s"${item.content.get}$randomn"
     println(item)
-    val dt = CommentApi.fmt.print(item.updatedt)
+    val dt = CommentApi.fmt.print(item.updatedt.get)
     val data = Map(
       "user_id" -> "user_id",
       "editor" -> "editor",
